@@ -1,0 +1,10 @@
+<launch>
+  <arg name="world_file"               default="$(find trash_collection_robot)/config/empty_world.yaml" />
+  <arg name="get_occupancy_grid_topic" default="get_occupancy_grid" />
+  <arg name="tf_frame"                 default="map" />
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find trash_collection_robot)/rviz/Proj2.rviz"/>
+
+  <include file="$(find trash_collection_robot)/launch/robot_state_publisher.launch" />
+  <include file="$(find trash_collection_robot)/launch/spin_up_bot.launch" />
+</launch>

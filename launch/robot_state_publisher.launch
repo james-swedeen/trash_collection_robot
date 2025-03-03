@@ -1,0 +1,27 @@
+<launch>
+  <arg name="robot_tf_prefix" default="robot/" />
+  <arg name="pub_frequency"   default="50" />
+  <arg name="motor_configs"   default="$(find interbotix_xsarm_control)/config/rx200.yaml"/>
+  <arg name="mode_configs"    default="$(find interbotix_xsarm_control)/config/modes.yaml"/>
+  <arg name="use_sim"         default="false" />
+
+
+  <arg name="xs_sdk_type" value="xs_sdk" unless="$(arg use_sim)" />
+  <arg name="xs_sdk_type" value="xs_sdk_sim" if="$(arg use_sim)" />
+
+  <group ns="$(arg robot_tf_prefix)" >
+    <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find trash_collection_robot)/urdf/turtlebot3_waffle_pi_rx200.urdf'" />
+    <param name="robot_description" command="$(arg urdf_file) prefix:=$(arg robot_tf_prefix)" />
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="$(arg pub_frequency)" />
+    </node>
+    <node pkg="turtlebot_sim" type="turtlebot_vehicle" name="turtlebot_vehicle" output="screen" if="false"/>
+
+    <node name="xs_sdk" pkg="interbotix_xs_sdk" type="$(arg xs_sdk_type)" output="screen" if="$(arg use_sim)">
+      <param name="motor_configs" value="$(arg motor_configs)"/>
+      <param name="mode_configs"  value="$(arg mode_configs)"/>
+      <param name="load_configs"  value="true"/>
+    </node>
+  </group>
+</launch>

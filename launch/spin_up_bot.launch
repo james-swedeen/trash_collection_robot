@@ -1,0 +1,50 @@
+<launch>
+  <arg name="motor_configs" default="/home/up/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/interbotix_xsarm_control/config/rx200.yaml"/>
+  <arg name="mode_configs"  default="/home/up/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/interbotix_xsarm_control/config/modes.yaml"/>
+  <arg name="load_configs"  default="true"/>
+
+  <!-- Controller nodes -->
+  <group if="true">
+    <machine name="controller_pi" address="192.168.0.162" user="pi" password="usurobotics" env-loader="/home/pi/env.sh" default="true" />
+
+    <node pkg="turtlebot3_bringup" type="turtlebot3_diagnostics" name="turtlebot3_diagnostics" output="screen" />
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_core.launch" />
+  </group>
+
+  <!-- Sensor nodes -->
+  <group if="true">
+    <machine name="sensor_up_board" address="192.168.0.170" user="up" password="usurobotics" env-loader="/home/up/env.sh" default="true" />
+
+    <node name="controller_node" pkg="trash_collection_robot" type="controller_node" output="screen" launch-prefix="" respawn="false" if="true" />
+
+    <node name="color_detect" pkg="trash_collection_robot" type="color_detect_node" output="screen" launch-prefix="" respawn="false" if="true" />
+
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_node" output="screen" >
+      <param name="max_height" type="double" value="0.3" />
+      <param name="range_min" type="double" value="0.1" />
+      <param name="range_max" type="double" value="3" />
+      <param name="target_frame" value="real_sense_camera_link" />
+      <param name="concurrency_level" value="0" />
+
+      <remap from="cloud_in" to="/camera/depth/color/points" />
+    </node>
+
+    <node name="xs_sdk" pkg="interbotix_xs_sdk"  type="xs_sdk"  ns="robot" respawn="true" if="true">
+      <param name="motor_configs" value="$(arg motor_configs)"/>
+      <param name="mode_configs"  value="$(arg mode_configs)"/>
+      <param name="load_configs"  value="$(arg load_configs)"/>
+    </node>
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch" >
+      <arg name="tf_prefix"		      value="real_sense_camera"/>
+      <arg name="publish_tf"        value="true"/>
+      <arg name="enable_depth"      value="true"/>
+      <arg name="enable_color"      value="true"/>
+      <arg name="enable_confidence" value="false"/>
+      <arg name="publish_odom_tf"   value="false"/>
+      <arg name="enable_pointcloud" value="true"/>
+      <arg name="depth_fps"         value="30"/>
+      <arg name="color_fps"         value="30"/>
+    </include>
+  </group>
+</launch>
