@@ -6,6 +6,7 @@ This package is designed to be used within a ROS 1 framework.
 <video width="960" height="540" controls>
   <source src="pics/video.mp4" type="video/mp4">
 </video>
+<img src="pics/video.gif">
 <img src="pics/front.jpg">
 
 ## Hardware
