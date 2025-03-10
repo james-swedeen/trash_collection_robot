@@ -11,10 +11,9 @@ This package is designed to be used within a ROS 1 framework.
 
 ## Hardware
 
-The robot is composed on a [TurtleBot 3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/features/) with a [ReactorX-200](https://docs.trossenrobotics.com/interbotix_xsarms_docs/specifications/rx200.html) 5-DOF manipulator.
+The robot is composed of a [TurtleBot 3 Waffle](https://emanual.robotis.com/docs/en/platform/turtlebot3/features/) with a [ReactorX-200](https://docs.trossenrobotics.com/interbotix_xsarms_docs/specifications/rx200.html) 5-DOF manipulator.
 Additionally, a [Intel RealSense D435](https://www.intelrealsense.com/depth-camera-d435/) camera is used to receive depth images of the surroundings.
-Pieces of trash for collection are simulated with colored golf balls, and an Up
-has been included on board for computations passed what the default [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/) is capable of.
+Pieces of trash for collection are simulated with colored golf balls, and an UpBoard has been included on board for computations passed what the default [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/) is capable of.
 
 <img src="pics/side.jpg">
 <img src="pics/comp_pic.jpg">
@@ -44,7 +43,7 @@ rm interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interfac
 git clone -b noetic https://github.com/Interbotix/interbotix_ros_core.git
 rm interbotix_ros_core/interbotix_ros_xseries/CATKIN_IGNORE
 ```
-Finally install the ROS-based dependencies with the following command.
+Finally, install the ROS-based dependencies with the following command.
 ```bash
 sudo apt install ros-noetic-dynamixel-sdk ros-noetic-pointcloud-to-laserscan ros-noetic-moveit-visual-tools ros-noetic-turtlebot3 ros-noetic-realsense2-camera -y
 ```
@@ -52,7 +51,7 @@ Now you are ready to build the workspace and run the code.
 
 ### Docker Installation
 
-First you will need to install Docker with the following command.
+First, you will need to install Docker with the following command.
 ```bash
 sudo apt install docker.io -y
 ```
@@ -85,8 +84,8 @@ Now you are ready to build the workspace and run the code.
 
 ## Use
 
-Before running, make sure that the `ROS_MASTER_URI` of the `env.sh` scrips in both the Raspberry Pi and Up Board are set to address of the computer you will be launching everything from.
-Additionally, make sure that the `address` tags in the [launch/spin_up_bot.launch](launch/spin_up_bot.launch) file is set to the address of each device.
+Before running, make sure that the `ROS_MASTER_URI` of the `env.sh` scrips in both the Raspberry Pi and Up Board are set to the address of the computer you will be launching everything from.
+Additionally, make sure that the `address` tags in the [launch/spin_up_bot.launch](launch/spin_up_bot.launch) file are set to the address of each device.
 Now you should be able to start the program with the following command.
 ```bash
 roslaunch trash_collection_robot run_hardware.launch
@@ -94,7 +93,7 @@ roslaunch trash_collection_robot run_hardware.launch
 This will make the robot drive randomly around the room looking for any colored golf balls.
 When a ball is found it will zero in on the ball until it is close enough to pick up.
 Then the arm will pick the ball up and deposit it into the basket on the side of the bot before resuming its sweep of the room.
-Additionally a RVIS window will open and show you what the RealSense camera is seeing along with a model of the robot.
+Additionally, a RVIS window will open and show you what the RealSense camera is seeing along with a model of the robot.
 
 <img src="pics/rviz_pic.png">
 
